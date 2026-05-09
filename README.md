@@ -5,6 +5,7 @@ I tend to test a lot of GraphQL implementations, and frankly the existing tools 
 This, therefore, is a small, open-source and lightweight, self-hosted GraphQL IDE, which aims to simplifying GraphQL testing. 
 
 **GraphQLMe** lets you introspect any GraphQL local or remote endpoint, browse its schema interactively, visually compose queries and mutations with argument forms and field selectors, and run them — all from a single, hackable, binary.
+<img width="1512" height="862" alt="Screenshot 2026-05-09 at 18 01 38" src="https://github.com/user-attachments/assets/fced4f06-f8b8-402b-8817-b7cc13e5a2ca" />
 
 ## Features
 
