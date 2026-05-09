@@ -1,0 +1,487 @@
+/* ── Reset & Base ─────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #131415;
+  color: #e0e0e0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ───────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #131415;
+  border-bottom: 1px solid #656667;
+}
+
+/* ── Custom Headers Panel ─────────────────────────── */
+#headers-panel {
+  padding: 8px 16px;
+  background: #131415;
+  border-bottom: 1px solid #656667;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #404143;
+  border-radius: 4px;
+  background: #1e2123;
+  color: #e0e0e0;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px;
+}
+
+.header-row input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+.header-row .btn-remove {
+  background: none;
+  border: none;
+  color: #e94560;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.header-row .btn-remove:hover {
+  color: #ff6b81;
+}
+
+#add-header-btn {
+  align-self: flex-start;
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+header label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #e94560;
+  white-space: nowrap;
+}
+
+header input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #404143;
+  border-radius: 4px;
+  background: #131415;
+  color: #e0e0e0;
+  font-size: 14px;
+  font-family: monospace;
+}
+
+header input:focus { outline: none; border-color: #e94560; }
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #e94560;
+  color: #fff;
+}
+
+.btn-primary:hover { background: #c73652; }
+
+.btn-secondary {
+  background: #1e2123;
+  color: #e0e0e0;
+}
+
+.btn-secondary:hover { background: #1a4a7a; }
+
+/* ── Main Layout ──────────────────────────────────── */
+main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── Schema Browser (Left Pane) ───────────────────── */
+#schema-browser {
+  width: 280px;
+  min-width: 220px;
+  background: #131415;
+  border-right: 1px solid #656667;
+  display: flex;
+  flex-direction: column;
+}
+
+#schema-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid #404143;
+  background: #1e2123;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-family: monospace;
+  outline: none;
+  flex-shrink: 0;
+}
+
+#schema-search:focus { border-bottom-color: #e94560; }
+
+#schema-list-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+#schema-browser h3 {
+  padding: 8px 16px 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #e94560;
+}
+
+/* ── Collapsible Sections ─────────────────────────── */
+.collapsible {
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapsible + ul,
+.collapsible + div {
+  overflow: hidden;
+}
+
+.collapsible:not(.open) + ul,
+.collapsible:not(.open) + div {
+  display: none !important;
+}
+
+#schema-browser .empty-msg {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #666;
+  font-style: italic;
+}
+
+#schema-browser ul { list-style: none; }
+
+#schema-browser li {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-family: monospace;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.15s;
+}
+
+#schema-browser li:hover {
+  background: #131415;
+  border-left-color: #e94560;
+}
+
+#schema-browser li.active {
+  background: #131415;
+  border-left-color: #e94560;
+}
+
+.field-name { color: #82b1ff; }
+.field-args { color: #888; font-size: 12px; }
+.field-type { color: #c3e88d; font-size: 12px; }
+
+/* ── Editor Pane (Center) ─────────────────────────── */
+#editor-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+/* ── Resizable Divider ────────────────────────────── */
+#pane-divider {
+  width: 6px;
+  cursor: col-resize;
+  background: #656667;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+#pane-divider:hover {
+  background: #e94560;
+}
+
+#editor-pane .pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #131415;
+  border-bottom: 1px solid #656667;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+#query-editor {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  resize: none;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #131415;
+  color: #e0e0e0;
+  tab-size: 2;
+}
+
+#query-editor:focus { outline: none; }
+
+/* ── Response Pane (Right) ─────────────────────────── */
+#response-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+#response-pane .pane-header {
+  padding: 8px 12px;
+  background: #131415;
+  border-bottom: 1px solid #656667;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+#response-viewer {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #131415;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #c3e88d;
+}
+
+/* ── Status Bar ────────────────────────────────────── */
+#status-bar {
+  padding: 6px 16px;
+  background: #131415;
+  border-top: 1px solid #656667;
+  font-size: 12px;
+  color: #888;
+}
+
+#status-bar.error { color: #e94560; }
+#status-bar.success { color: #c3e88d; }
+
+/* ── Type Info Panel ──────────────────────────────── */
+.type-info {
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #888;
+  border-bottom: 1px solid #333;
+}
+
+.type-info .return-type {
+  color: #c3e88d;
+}
+
+.type-info .description {
+  color: #aaa;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ── Select All Toggle ────────────────────────────── */
+.select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0 6px;
+  font-size: 11px;
+  color: #888;
+  border-bottom: 1px solid #333;
+  margin-bottom: 6px;
+}
+
+.select-all-row input[type="checkbox"] {
+  accent-color: #e94560;
+}
+
+.select-all-row label {
+  cursor: pointer;
+}
+
+/* ── Builder Panels (Args + Fields) ───────────────── */
+.builder-panel {
+  border-bottom: 1px solid #656667;
+  max-height: 40vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.builder-panel h4 {
+  padding: 6px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #e94560;
+  background: #1e2123;
+  border-bottom: 1px solid #333;
+  margin: 0;
+}
+
+/* ── Args Form ────────────────────────────────────── */
+#args-form {
+  padding: 8px 12px;
+}
+
+.arg-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.arg-label {
+  font-family: monospace;
+  font-size: 12px;
+  color: #82b1ff;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.arg-label .required {
+  color: #e94560;
+  font-weight: bold;
+}
+
+.arg-type {
+  font-size: 11px;
+  color: #666;
+  min-width: 80px;
+}
+
+.arg-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #404143;
+  border-radius: 3px;
+  background: #1e2123;
+  color: #e0e0e0;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.arg-input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+/* ── Fields Tree ──────────────────────────────────── */
+#fields-tree {
+  padding: 8px 12px;
+  min-width: max-content;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  font-family: monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.field-row input[type="checkbox"] {
+  accent-color: #e94560;
+}
+
+.field-row label {
+  color: #82b1ff;
+  cursor: pointer;
+}
+
+.field-row .type-hint {
+  color: #666;
+  font-size: 11px;
+}
+
+.field-group {
+  margin-left: 10px;
+  border-left: 1px solid #333;
+  padding-left: 6px;
+}
+
+.field-group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  font-family: monospace;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.field-group-header input[type="checkbox"] {
+  accent-color: #e94560;
+}
+
+.field-group-header .toggle {
+  color: #888;
+  font-size: 10px;
+  width: 12px;
+}
+
+.field-group-header label {
+  color: #c3e88d;
+  cursor: pointer;
+}
+
+.field-group-header .type-hint {
+  color: #666;
+  font-size: 11px;
+}
+
+.field-group-children {
+  overflow: hidden;
+}
+
+.field-group-children.collapsed {
+  display: none;
+}

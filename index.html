@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GraphQL Tool</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- ── Header ────────────────────────────────────────── -->
+  <header>
+    <label>POST</label>
+    <input type="text" id="url-input" placeholder="https://example.com/graphql" />
+    <button class="btn-primary" onclick="introspect()">Introspect</button>
+    <button class="btn-secondary" onclick="loadSavedSchema()">Load Saved</button>
+    <button class="btn-secondary" id="headers-toggle">► Headers</button>
+  </header>
+
+  <!-- ── Custom Headers ────────────────────────────────── -->
+  <div id="headers-panel" style="display:none">
+    <div id="headers-rows"></div>
+    <button class="btn-secondary btn-small" id="add-header-btn">+ Add Header</button>
+  </div>
+
+  <!-- ── Main Content ──────────────────────────────────── -->
+  <main>
+
+    <!-- Schema Browser -->
+    <div id="schema-browser">
+      <input type="text" id="schema-search" placeholder="Search queries & mutations..." />
+      <div id="schema-list-area">
+        <h3 class="collapsible open" onclick="toggleSection(this)">▼ Queries</h3>
+        <ul id="queries-list">
+          <li class="empty-msg">No schema loaded</li>
+        </ul>
+
+        <h3 class="collapsible open" onclick="toggleSection(this)">▼ Mutations</h3>
+        <ul id="mutations-list">
+          <li class="empty-msg">No schema loaded</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Query Builder + Editor -->
+    <div id="editor-pane">
+      <div class="pane-header">
+        <span>Query Builder</span>
+        <button class="btn-primary" onclick="runQuery()">▶ Run</button>
+      </div>
+
+      <!-- Type info (shown for selected field) -->
+      <div id="type-info" class="type-info" style="display:none"></div>
+
+      <!-- Arguments form (populated when a field is selected) -->
+      <div id="args-panel" class="builder-panel" style="display:none">
+        <h4 class="collapsible open" onclick="toggleSection(this)">▼ Arguments</h4>
+        <div id="args-form"></div>
+      </div>
+
+      <!-- Return fields selector (populated when a field is selected) -->
+      <div id="fields-panel" class="builder-panel" style="display:none">
+        <h4 class="collapsible open" onclick="toggleSection(this)">▼ Return Fields</h4>
+        <div id="fields-tree"></div>
+      </div>
+
+      <textarea id="query-editor" spellcheck="false" placeholder="Write your GraphQL query here..."></textarea>
+    </div>
+
+    <!-- Resizable Divider -->
+    <div id="pane-divider"></div>
+
+    <!-- Response Viewer -->
+    <div id="response-pane">
+      <div class="pane-header">Response</div>
+      <pre id="response-viewer">Results will appear here.</pre>
+    </div>
+
+  </main>
+
+  <!-- ── Status Bar ──────────────────────────────────── -->
+  <div id="status-bar">Ready</div>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/network.js"></script>
+  <script src="/js/schema.js"></script>
+  <script src="/js/builder.js"></script>
+  <script src="/js/ui.js"></script>
+</body>
+</html>
