@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -132,6 +133,11 @@ func DetectResponseDiff(baseline, injected string) string {
 		return ""
 	}
 
+	// If the injected response is empty, it's not a meaningful finding.
+	if injLen == 0 {
+		return ""
+	}
+
 	absDiff := injLen - baseLen
 	if absDiff < 0 {
 		absDiff = -absDiff
@@ -159,10 +165,11 @@ func DetectResponseDiff(baseline, injected string) string {
 	if baseLen > 0 {
 		ratio := float64(absDiff) / float64(baseLen)
 		if ratio > 0.3 && absDiff > 50 {
-			if injLen > baseLen {
-				return "Response significantly larger (+%d bytes) — possible data leak"
+			diff := injLen - baseLen
+			if diff > 0 {
+				return fmt.Sprintf("Response significantly larger (+%d bytes) — possible data leak", diff)
 			}
-			return "Response significantly smaller (-%d bytes) — possible bypass"
+			return fmt.Sprintf("Response significantly smaller (%d bytes) — possible bypass", diff)
 		}
 	}
 

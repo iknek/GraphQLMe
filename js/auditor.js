@@ -86,7 +86,7 @@ function buildOpRow(field, isQuery) {
 
   const injectableArgs = (field.args || []).filter(a => {
     const t = resolveBaseTypeName(a.type);
-    return t === "String" || t === "ID";
+    return t === "String" || t === "ID" || t === "Int";
   });
 
   const argCount = document.createElement("span");
@@ -318,7 +318,9 @@ function categoryDisplayName(cat) {
     PATH_TRAVERSAL: "Path Traversal",
     XSS_REFLECTED: "Reflected XSS",
     XSS_STORED: "Stored XSS",
+    SSRF: "SSRF",
     CSRF: "CSRF",
+    IDOR: "IDOR",
   };
   return names[cat] || cat;
 }
@@ -381,22 +383,22 @@ function toggleInlineDetail(tr, f) {
   detailTd.appendChild(evidenceLabel);
   detailTd.appendChild(evidencePre);
 
-  if (f.baselineBody) {
+  {
     const bl = document.createElement("h5");
     bl.textContent = "Baseline Response";
     const blPre = document.createElement("pre");
     blPre.className = "finding-code";
-    blPre.textContent = f.baselineBody;
+    blPre.textContent = f.baselineBody || "(not captured)";
     detailTd.appendChild(bl);
     detailTd.appendChild(blPre);
   }
 
-  if (f.injectedBody) {
+  {
     const ij = document.createElement("h5");
     ij.textContent = "Injected Response";
     const ijPre = document.createElement("pre");
     ijPre.className = "finding-code";
-    ijPre.textContent = f.injectedBody;
+    ijPre.textContent = f.injectedBody || "(not captured)";
     detailTd.appendChild(ij);
     detailTd.appendChild(ijPre);
   }

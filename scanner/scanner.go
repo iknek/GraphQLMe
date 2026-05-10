@@ -83,11 +83,24 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 			if !isInjectable(arg.TypeName) {
 				continue
 			}
+
+			// Get contextual extra payloads based on arg name.
+			contextPayloads := GetContextualPayloads(arg.Name)
+
 			for _, cat := range req.Categories {
-				payloads := Payloads[cat]
+				// Skip CSRF and IDOR — they have their own test flows.
+				if cat == CategoryCSRF || cat == CategoryIDOR {
+					continue
+				}
+				payloads := make([]string, len(Payloads[cat]))
+				copy(payloads, Payloads[cat])
 				// Append custom payloads if any.
 				if custom, ok := req.CustomPayloads[cat]; ok {
 					payloads = append(payloads, custom...)
+				}
+				// Append context-aware payloads for this category.
+				if ctxP, ok := contextPayloads[cat]; ok {
+					payloads = append(payloads, ctxP...)
 				}
 				for _, p := range payloads {
 					cases = append(cases, testCase{op: op, arg: arg, category: cat, payload: p})
@@ -219,6 +232,17 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 			csrfFindings := RunCSRFTests(req.URL, req.Headers, mutations)
 			m.mu.Lock()
 			job.Findings = append(job.Findings, csrfFindings...)
+			m.mu.Unlock()
+			break
+		}
+	}
+
+	// Run IDOR tests if the IDOR category is selected.
+	for _, cat := range req.Categories {
+		if cat == CategoryIDOR {
+			idorFindings := RunIDORTests(req.URL, req.Headers, req.Operations, req.RateLimit)
+			m.mu.Lock()
+			job.Findings = append(job.Findings, idorFindings...)
 			m.mu.Unlock()
 			break
 		}

