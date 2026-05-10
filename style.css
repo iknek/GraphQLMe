@@ -485,3 +485,323 @@ main {
 .field-group-children.collapsed {
   display: none;
 }
+
+/* ── Auditor Mode ─────────────────────────────────── */
+#mode-toggle {
+  margin-left: auto;
+  background: #1a1e3a;
+  border-color: #4a5aef;
+  color: #8b9cf7;
+}
+
+#mode-toggle:hover {
+  background: #4a5aef;
+  color: #fff;
+}
+
+#auditor-view {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#audit-config {
+  width: 300px;
+  min-width: 260px;
+  background: #1a1b1d;
+  border-right: 1px solid #656667;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+#audit-config h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #888;
+  margin: 12px 0 8px 0;
+  letter-spacing: 0.5px;
+}
+
+#audit-config h3:first-child {
+  margin-top: 0;
+}
+
+.audit-select-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #999;
+}
+
+#audit-ops-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.audit-op-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.audit-op-row label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.op-badge {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.op-query {
+  background: #1a3a1a;
+  color: #4caf50;
+}
+
+.op-mutation {
+  background: #3a1a1a;
+  color: #e94560;
+}
+
+.op-arg-count {
+  font-size: 11px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.audit-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.audit-categories label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#audit-start-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.audit-setting {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.audit-setting input {
+  padding: 6px 10px;
+  border: 1px solid #404143;
+  border-radius: 4px;
+  background: #1e2123;
+  color: #e0e0e0;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px;
+  width: 100%;
+}
+
+.audit-setting input:focus {
+  outline: none;
+  border-color: #4a5aef;
+}
+
+/* ── Audit Results ────────────────────────────────── */
+#audit-results {
+  flex: 1;
+  padding: 12px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-bar-track {
+  height: 8px;
+  background: #2a2b2d;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #4a5aef;
+  border-radius: 4px;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+#audit-progress-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.findings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.findings-header h3 {
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+#audit-findings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+#audit-findings-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background: #1a1b1d;
+  border-bottom: 1px solid #404143;
+  color: #888;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#audit-findings-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #2a2b2d;
+}
+
+.finding-row {
+  cursor: pointer;
+}
+
+.finding-row:hover {
+  background: #1a1b1d;
+}
+
+.payload-cell {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Severity badges */
+.sev-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sev-critical {
+  background: #4a0000;
+  color: #ff4444;
+}
+
+.sev-high {
+  background: #4a2200;
+  color: #ff8844;
+}
+
+.sev-medium {
+  background: #4a4a00;
+  color: #ffcc00;
+}
+
+.sev-low {
+  background: #003a00;
+  color: #44cc44;
+}
+
+.sev-info {
+  background: #00003a;
+  color: #4488ff;
+}
+
+/* ── Finding Detail (inline) ───────────────────────── */
+.finding-detail-row {
+  background: #1a1b1d;
+}
+
+.finding-detail-cell {
+  padding: 16px !important;
+  border-left: 3px solid #4a5aef;
+}
+
+.finding-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.finding-row.expanded {
+  background: #1e2025;
+}
+
+.finding-desc {
+  color: #bbb;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.finding-meta {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.finding-meta strong {
+  color: #888;
+}
+
+.finding-detail-cell h5 {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #888;
+  margin: 12px 0 4px 0;
+  letter-spacing: 0.5px;
+}
+
+.finding-code {
+  background: #0d0e10;
+  border: 1px solid #2a2b2d;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+}

@@ -15,6 +15,7 @@
     <button class="btn-primary" onclick="introspect()">Introspect</button>
     <button class="btn-secondary" onclick="loadSavedSchema()">Load Saved</button>
     <button class="btn-secondary" id="headers-toggle">► Headers</button>
+    <button class="btn-secondary" id="mode-toggle">Auditor ▶</button>
   </header>
 
   <!-- ── Custom Headers ────────────────────────────────── -->
@@ -24,7 +25,9 @@
   </div>
 
   <!-- ── Main Content ──────────────────────────────────── -->
-  <main>
+
+  <!-- Builder View (default) -->
+  <main id="builder-view">
 
     <!-- Schema Browser -->
     <div id="schema-browser">
@@ -78,6 +81,75 @@
 
   </main>
 
+  <!-- Auditor View (hidden by default) -->
+  <main id="auditor-view" style="display:none">
+
+    <!-- Scan Config Panel -->
+    <div id="audit-config">
+      <h3>Operations to Test</h3>
+      <div class="audit-select-all">
+        <input type="checkbox" id="audit-select-all-ops" checked>
+        <label for="audit-select-all-ops">Select all / none</label>
+      </div>
+      <div id="audit-ops-list">
+        <div class="empty-msg">No schema loaded. Introspect first.</div>
+      </div>
+
+      <h3>Injection Categories</h3>
+      <div class="audit-categories">
+        <label><input type="checkbox" class="audit-category" value="SQL_INJECTION" checked> SQL Injection</label>
+        <label><input type="checkbox" class="audit-category" value="NOSQL_INJECTION" checked> NoSQL Injection</label>
+        <label><input type="checkbox" class="audit-category" value="SSTI" checked> SSTI</label>
+        <label><input type="checkbox" class="audit-category" value="COMMAND_INJECTION" checked> Command Injection</label>
+        <label><input type="checkbox" class="audit-category" value="PATH_TRAVERSAL" checked> Path Traversal</label>
+        <label><input type="checkbox" class="audit-category" value="XSS_REFLECTED" checked> Reflected XSS</label>
+        <label><input type="checkbox" class="audit-category" value="XSS_STORED"> Stored XSS</label>
+        <label><input type="checkbox" class="audit-category" value="SSRF" checked> SSRF</label>
+        <label><input type="checkbox" class="audit-category" value="CSRF" checked> CSRF</label>
+        <label><input type="checkbox" class="audit-category" value="IDOR" checked> IDOR</label>
+      </div>
+
+      <h3>Settings</h3>
+      <div class="audit-setting">
+        <label for="audit-rate-limit">Delay between requests (ms):</label>
+        <input type="number" id="audit-rate-limit" value="0" min="0" step="100" />
+      </div>
+
+      <button class="btn-primary" id="audit-start-btn">▶ Start Scan</button>
+    </div>
+
+    <!-- Results Panel -->
+    <div id="audit-results">
+      <div id="audit-progress" style="display:none">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="audit-progress-bar"></div>
+        </div>
+        <div id="audit-progress-text">0 / 0 tests (0%)</div>
+      </div>
+
+      <div id="audit-findings-section" style="display:none">
+        <div class="findings-header">
+          <h3>Findings</h3>
+          <button class="btn-secondary btn-small" id="audit-export-btn" style="display:none">Export Report</button>
+        </div>
+        <table id="audit-findings-table">
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Category</th>
+              <th>Operation</th>
+              <th>Argument</th>
+              <th>Payload</th>
+            </tr>
+          </thead>
+          <tbody id="audit-findings-body"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
   <!-- ── Status Bar ──────────────────────────────────── -->
   <div id="status-bar">Ready</div>
 
@@ -85,6 +157,7 @@
   <script src="/js/network.js"></script>
   <script src="/js/schema.js"></script>
   <script src="/js/builder.js"></script>
+  <script src="/js/auditor.js"></script>
   <script src="/js/ui.js"></script>
 </body>
 </html>
