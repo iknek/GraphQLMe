@@ -5,11 +5,12 @@ I tend to test a lot of GraphQL implementations, and frankly the existing tools 
 This, therefore, is a small, open-source and lightweight, self-hosted GraphQL IDE and security auditor, which aims to simplifying GraphQL testing. 
 
 **GraphQLMe** lets you introspect any local or remote GraphQL endpoint, browse its schema interactively, visually compose queries and mutations with argument forms and field selectors, run them, and audit them for security vulnerabilities — all from a single, hackable, binary.
-<img width="1512" height="862" alt="Screenshot 2026-05-09 at 18 01 38" src="https://github.com/user-attachments/assets/fced4f06-f8b8-402b-8817-b7cc13e5a2ca" />
 
 ## Features
 
 ### Query Builder
+<img width="1512" height="805" alt="Screenshot 2026-05-10 at 22 48 00" src="https://github.com/user-attachments/assets/ab6deab6-b40b-47a2-ba58-8a9ccad5adaa" />
+
 - **Schema introspection** — Point at any GraphQL endpoint and instantly browse all queries, mutations, types, and arguments.
 - **Visual query builder** — Select fields with checkboxes, fill in arguments with typed inputs, and watch the query assemble in real time. No more troubleshooting syntax errors!
 - **Custom headers** — Add key-value headers (auth tokens, API keys, etc.) that get forwarded to the target endpoint.
@@ -17,6 +18,8 @@ This, therefore, is a small, open-source and lightweight, self-hosted GraphQL ID
 - **CORS proxy** — Built-in local proxy forwards requests to third-party GraphQL APIs, bypassing browser CORS restrictions.
 
 ### Security Auditor
+<img width="1512" height="808" alt="Screenshot 2026-05-10 at 22 47 09" src="https://github.com/user-attachments/assets/9ae89c06-6843-4b70-a150-97d759fbda8c" />
+
 Toggle into **Auditor mode** to scan GraphQL endpoints for vulnerabilities. Select which operations and attack categories to test, then let the scanner run through payloads automatically.
 
 **Injection testing:**
