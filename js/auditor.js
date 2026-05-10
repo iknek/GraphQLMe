@@ -15,7 +15,6 @@ const auditProgressBar = document.getElementById("audit-progress-bar");
 const auditProgressText = document.getElementById("audit-progress-text");
 const auditFindingsTable = document.getElementById("audit-findings-body");
 const auditFindingsSection = document.getElementById("audit-findings-section");
-const auditFindingDetail = document.getElementById("audit-finding-detail");
 const auditExportBtn = document.getElementById("audit-export-btn");
 const auditSelectAllOps = document.getElementById("audit-select-all-ops");
 
@@ -178,7 +177,6 @@ async function startAuditScan() {
   auditStartBtn.textContent = "Scanning...";
   auditProgress.style.display = "";
   auditFindingsSection.style.display = "none";
-  auditFindingDetail.style.display = "none";
   auditFindingsTable.innerHTML = "";
   auditorFindings = [];
 
@@ -191,6 +189,7 @@ async function startAuditScan() {
         headers: headers,
         operations: operations,
         categories: categories,
+        rateLimit: parseInt(document.getElementById("audit-rate-limit").value) || 0,
       }),
     });
 
@@ -280,7 +279,7 @@ function renderFindings() {
   for (const f of auditorFindings) {
     const tr = document.createElement("tr");
     tr.className = "finding-row";
-    tr.addEventListener("click", () => showFindingDetail(f));
+    tr.addEventListener("click", () => toggleInlineDetail(tr, f));
 
     const sevTd = document.createElement("td");
     const sevBadge = document.createElement("span");
@@ -317,16 +316,37 @@ function categoryDisplayName(cat) {
     SSTI: "SSTI",
     COMMAND_INJECTION: "Command Injection",
     PATH_TRAVERSAL: "Path Traversal",
+    XSS_REFLECTED: "Reflected XSS",
+    XSS_STORED: "Stored XSS",
+    CSRF: "CSRF",
   };
   return names[cat] || cat;
 }
 
-// ── Finding Detail ─────────────────────────────────
-function showFindingDetail(f) {
-  auditFindingDetail.style.display = "";
-  auditFindingDetail.innerHTML = "";
+// ── Finding Detail (inline below row) ──────────────
+function toggleInlineDetail(tr, f) {
+  // If there's already a detail row right after this one, toggle it
+  const next = tr.nextElementSibling;
+  if (next && next.classList.contains("finding-detail-row")) {
+    next.remove();
+    tr.classList.remove("expanded");
+    return;
+  }
 
-  const header = document.createElement("h4");
+  // Remove any other open detail rows
+  auditFindingsTable.querySelectorAll(".finding-detail-row").forEach(r => r.remove());
+  auditFindingsTable.querySelectorAll(".expanded").forEach(r => r.classList.remove("expanded"));
+
+  tr.classList.add("expanded");
+
+  const detailTr = document.createElement("tr");
+  detailTr.className = "finding-detail-row";
+  const detailTd = document.createElement("td");
+  detailTd.colSpan = 5;
+  detailTd.className = "finding-detail-cell";
+
+  const header = document.createElement("div");
+  header.className = "finding-detail-header";
   header.innerHTML = '<span class="sev-badge sev-' + f.severity.toLowerCase() + '">' +
     f.severity + '</span> ' + escapeHtml(categoryDisplayName(f.category));
 
@@ -353,43 +373,36 @@ function showFindingDetail(f) {
   evidencePre.className = "finding-code";
   evidencePre.textContent = f.evidence;
 
-  auditFindingDetail.appendChild(header);
-  auditFindingDetail.appendChild(desc);
-  auditFindingDetail.appendChild(meta);
-  auditFindingDetail.appendChild(payloadLabel);
-  auditFindingDetail.appendChild(payloadPre);
-  auditFindingDetail.appendChild(evidenceLabel);
-  auditFindingDetail.appendChild(evidencePre);
+  detailTd.appendChild(header);
+  detailTd.appendChild(desc);
+  detailTd.appendChild(meta);
+  detailTd.appendChild(payloadLabel);
+  detailTd.appendChild(payloadPre);
+  detailTd.appendChild(evidenceLabel);
+  detailTd.appendChild(evidencePre);
 
   if (f.baselineBody) {
     const bl = document.createElement("h5");
     bl.textContent = "Baseline Response";
-    bl.className = "collapsible-detail";
     const blPre = document.createElement("pre");
-    blPre.className = "finding-code finding-collapsible";
+    blPre.className = "finding-code";
     blPre.textContent = f.baselineBody;
-    blPre.style.display = "none";
-    bl.addEventListener("click", () => {
-      blPre.style.display = blPre.style.display === "none" ? "" : "none";
-    });
-    auditFindingDetail.appendChild(bl);
-    auditFindingDetail.appendChild(blPre);
+    detailTd.appendChild(bl);
+    detailTd.appendChild(blPre);
   }
 
   if (f.injectedBody) {
     const ij = document.createElement("h5");
     ij.textContent = "Injected Response";
-    ij.className = "collapsible-detail";
     const ijPre = document.createElement("pre");
-    ijPre.className = "finding-code finding-collapsible";
+    ijPre.className = "finding-code";
     ijPre.textContent = f.injectedBody;
-    ijPre.style.display = "none";
-    ij.addEventListener("click", () => {
-      ijPre.style.display = ijPre.style.display === "none" ? "" : "none";
-    });
-    auditFindingDetail.appendChild(ij);
-    auditFindingDetail.appendChild(ijPre);
+    detailTd.appendChild(ij);
+    detailTd.appendChild(ijPre);
   }
+
+  detailTr.appendChild(detailTd);
+  tr.after(detailTr);
 }
 
 // ── Export Report ───────────────────────────────────

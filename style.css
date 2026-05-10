@@ -606,6 +606,29 @@ main {
   font-size: 14px;
 }
 
+.audit-setting {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.audit-setting input {
+  padding: 6px 10px;
+  border: 1px solid #404143;
+  border-radius: 4px;
+  background: #1e2123;
+  color: #e0e0e0;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px;
+  width: 100%;
+}
+
+.audit-setting input:focus {
+  outline: none;
+  border-color: #4a5aef;
+}
+
 /* ── Audit Results ────────────────────────────────── */
 #audit-results {
   flex: 1;
@@ -722,19 +745,26 @@ main {
   color: #4488ff;
 }
 
-/* ── Finding Detail ───────────────────────────────── */
-#audit-finding-detail {
+/* ── Finding Detail (inline) ───────────────────────── */
+.finding-detail-row {
   background: #1a1b1d;
-  border: 1px solid #404143;
-  border-radius: 6px;
-  padding: 16px;
 }
 
-#audit-finding-detail h4 {
+.finding-detail-cell {
+  padding: 16px !important;
+  border-left: 3px solid #4a5aef;
+}
+
+.finding-detail-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.finding-row.expanded {
+  background: #1e2025;
 }
 
 .finding-desc {
@@ -755,20 +785,12 @@ main {
   color: #888;
 }
 
-#audit-finding-detail h5 {
+.finding-detail-cell h5 {
   font-size: 12px;
   text-transform: uppercase;
   color: #888;
   margin: 12px 0 4px 0;
   letter-spacing: 0.5px;
-}
-
-.collapsible-detail {
-  cursor: pointer;
-}
-
-.collapsible-detail:hover {
-  color: #e94560;
 }
 
 .finding-code {

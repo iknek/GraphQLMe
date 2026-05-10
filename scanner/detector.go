@@ -103,6 +103,11 @@ var errorSignatures = map[Category][]string{
 // that indicate a successful injection for the given category.
 // Returns the matched evidence string, or empty if no match.
 func DetectErrorBased(category Category, responseBody string) string {
+	// For XSS categories, use the specialized XSS reflection check.
+	if category == CategoryXSSReflected || category == CategoryXSSStored {
+		return ""
+	}
+
 	lower := strings.ToLower(responseBody)
 	sigs, ok := errorSignatures[category]
 	if !ok {

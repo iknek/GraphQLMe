@@ -53,6 +53,8 @@ type ScanRequest struct {
 	Categories []Category        `json:"categories"`
 	// CustomPayloads maps category → list of extra payloads to try.
 	CustomPayloads map[Category][]string `json:"customPayloads,omitempty"`
+	// RateLimit is the delay in milliseconds between requests.
+	RateLimit int `json:"rateLimit,omitempty"`
 }
 
 // OperationTarget identifies a query or mutation to test.

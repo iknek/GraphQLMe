@@ -118,6 +118,11 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 		wg.Add(1)
 		sem <- struct{}{}
 
+		// Rate limiting
+		if req.RateLimit > 0 {
+			time.Sleep(time.Duration(req.RateLimit) * time.Millisecond)
+		}
+
 		go func(tc testCase) {
 			defer wg.Done()
 			defer func() { <-sem }()
@@ -130,7 +135,7 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 
 			// Send injected request.
 			respBody, statusCode, err := sendGraphQL(req.URL, req.Headers, injectedQuery)
-			if err != nil {
+			if err != nil || statusCode == 406 {
 				done := completed.Add(1)
 				m.mu.Lock()
 				job.Progress.Completed = int(done)
@@ -141,13 +146,24 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 			// Detect vulnerabilities.
 			var evidence, description string
 
+			// XSS-specific detection: check if payload is reflected.
+			if tc.category == CategoryXSSReflected || tc.category == CategoryXSSStored {
+				if xssEvidence := DetectXSSReflection(tc.payload, respBody); xssEvidence != "" {
+					meta := CategoryMeta[tc.category]
+					evidence = xssEvidence
+					description = fmt.Sprintf("%s detected. %s", meta.Name, xssEvidence)
+				}
+			}
+
 			// 1. Error-based detection.
-			if sig := DetectErrorBased(tc.category, respBody); sig != "" {
-				meta := CategoryMeta[tc.category]
-				evidence = sig
-				description = fmt.Sprintf("%s detected via error-based analysis. "+
-					"The response contains '%s' which indicates the injected payload "+
-					"was interpreted by the backend.", meta.Name, sig)
+			if evidence == "" {
+				if sig := DetectErrorBased(tc.category, respBody); sig != "" {
+					meta := CategoryMeta[tc.category]
+					evidence = sig
+					description = fmt.Sprintf("%s detected via error-based analysis. "+
+						"The response contains '%s' which indicates the injected payload "+
+						"was interpreted by the backend.", meta.Name, sig)
+				}
 			}
 
 			// 2. Response diff detection (only if error-based didn't match).
@@ -190,6 +206,23 @@ func (m *Manager) runScan(job *ScanJob, req ScanRequest) {
 	}
 
 	wg.Wait()
+
+	// Run CSRF tests if the CSRF category is selected.
+	for _, cat := range req.Categories {
+		if cat == CategoryCSRF {
+			var mutations []OperationTarget
+			for _, op := range req.Operations {
+				if !op.IsQuery {
+					mutations = append(mutations, op)
+				}
+			}
+			csrfFindings := RunCSRFTests(req.URL, req.Headers, mutations)
+			m.mu.Lock()
+			job.Findings = append(job.Findings, csrfFindings...)
+			m.mu.Unlock()
+			break
+		}
+	}
 }
 
 // getBaseline fetches or returns cached baseline response for an operation.
