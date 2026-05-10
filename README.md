@@ -4,18 +4,18 @@ I tend to test a lot of GraphQL implementations, and frankly the existing tools 
 
 This, therefore, is a small, open-source and lightweight, self-hosted GraphQL IDE, which aims to simplifying GraphQL testing. 
 
-**GraphQLMe** lets you introspect any GraphQL local or remote endpoint, browse its schema interactively, visually compose queries and mutations with argument forms and field selectors, and run them — all from a single, hackable, binary.
+**GraphQLMe** lets you introspect any local or remote GraphQL endpoint, browse its schema interactively, visually compose queries and mutations with argument forms and field selectors, and run them — all from a single, hackable, binary.
 <img width="1512" height="862" alt="Screenshot 2026-05-09 at 18 01 38" src="https://github.com/user-attachments/assets/fced4f06-f8b8-402b-8817-b7cc13e5a2ca" />
 
 ## Features
 
-- **Schema introspection** — Point at any GraphQL endpoint and instantly browse all queries, mutations, types, and arguments. This means that unlike GraphiQL and GraphQL playground, you do not need server side embeds as long as introspection is enabled.
+- **Schema introspection** — Point at any GraphQL endpoint and instantly browse all queries, mutations, types, and arguments.
 - **Visual query builder** — Select fields with checkboxes, fill in arguments with typed inputs, and watch the query assemble in real time. No more troubleshooting syntax errors!
 - **Custom headers** — Add key-value headers (auth tokens, API keys, etc.) that get forwarded to the target endpoint.
-- **Resizable split panes** — Drag the divider between query editor and response viewer to suit your workflow.
 - **Schema persistence** — Introspected schemas are saved to `schema.json` and can be reloaded without re-querying.
 - **CORS proxy** — Built-in local proxy forwards requests to third-party GraphQL APIs, bypassing browser CORS restrictions.
 - **Single lightweight binary** — All HTML, CSS, and JS is embedded in the Go binary. No Node.js, no npm, no build step, just compile and go.
+- **Easily extendable and hackable** — Add your own features, change the introspection query, or build a whole new tool on top of this one. This tool is easily modifiable to support your needs.
 
 ## Quick Start
 
