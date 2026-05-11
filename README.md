@@ -1,9 +1,5 @@
 # GraphQLMe
 
-I tend to test a lot of GraphQL implementations, and frankly the existing tools are all incredibly frustrating. Either they're reliant on tons of npm dependencies, or they require an account to a service you'll never use, they lack extensibility, or they're flat out broken and deprecated. 
-
-This, therefore, is a small, open-source and lightweight, self-hosted GraphQL IDE and security auditor, which aims to simplifying GraphQL testing. 
-
 **GraphQLMe** lets you introspect any local or remote GraphQL endpoint, browse its schema interactively, visually compose queries and mutations with argument forms and field selectors, run them, and audit them for security vulnerabilities — all from a single, hackable, binary.
 
 ## Features
