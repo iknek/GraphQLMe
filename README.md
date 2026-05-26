@@ -7,7 +7,7 @@
 ### Query Builder
 <img width="1512" height="805" alt="Screenshot 2026-05-10 at 22 48 00" src="https://github.com/user-attachments/assets/ab6deab6-b40b-47a2-ba58-8a9ccad5adaa" />
 
-- **Schema introspection** — Point at any GraphQL endpoint and instantly browse all queries, mutations, types, and arguments.
+- **Schema introspection** — Point at any GraphQL endpoint (which supports introspection) and instantly browse all queries, mutations, types, and arguments.
 - **Visual query builder** — Select fields with checkboxes, fill in arguments with typed inputs, and watch the query assemble in real time. No more troubleshooting syntax errors!
 - **Custom headers** — Add key-value headers (auth tokens, API keys, etc.) that get forwarded to the target endpoint.
 - **Schema persistence** — Introspected schemas are saved to `schema.json` and can be reloaded without re-querying.
