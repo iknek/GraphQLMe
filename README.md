@@ -50,7 +50,7 @@ go build -o graphqlme .
 ./graphqlme
 ```
 
-Open [http://localhost:8080](http://localhost:8080), paste a GraphQL endpoint URL, and hit **Introspect**.
+Open [http://localhost:8083](http://localhost:8083), paste a GraphQL endpoint URL, and hit **Introspect**.
 
 ## Project Structure
 
