@@ -10,7 +10,10 @@
 
   <!-- ── Header ────────────────────────────────────────── -->
   <header>
-    <label>POST</label>
+    <select id="method-select">
+      <option value="POST" selected>POST</option>
+      <option value="GET">GET</option>
+    </select>
     <input type="text" id="url-input" placeholder="https://example.com/graphql" />
     <button class="btn-primary" onclick="introspect()">Introspect</button>
     <button class="btn-secondary" onclick="loadSavedSchema()">Load Saved</button>

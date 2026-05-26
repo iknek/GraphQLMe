@@ -12,12 +12,13 @@ function getCustomHeaders() {
 }
 
 // ── Proxy Helper ───────────────────────────────────
-async function proxyRequest(url, body) {
+async function proxyRequest(url, body, method) {
   const customHeaders = getCustomHeaders();
+  const selectedMethod = method || document.getElementById("method-select").value;
   const resp = await fetch("/api/proxy", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url: url, body: body, headers: customHeaders }),
+    body: JSON.stringify({ url: url, body: body, headers: customHeaders, method: selectedMethod }),
   });
   if (!resp.ok) {
     const text = await resp.text();

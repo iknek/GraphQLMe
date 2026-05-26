@@ -82,6 +82,23 @@ header label {
   white-space: nowrap;
 }
 
+header select {
+  font-weight: 600;
+  font-size: 14px;
+  color: #e94560;
+  background: #1e1f21;
+  border: 1px solid #404143;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+header select:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
 header input {
   flex: 1;
   padding: 8px 12px;

@@ -8,6 +8,7 @@ import (
 	"graphqlme/scanner"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 )
@@ -28,8 +29,8 @@ func main() {
 	mux.HandleFunc("/api/security/scan", handleScan)
 	mux.HandleFunc("/api/security/scan/", handleScanResult)
 
-	fmt.Println("GraphQL Tool running at http://localhost:8080")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	fmt.Println("GraphQL Tool running at http://localhost:8070")
+	if err := http.ListenAndServe(":8083", mux); err != nil {
 		fmt.Fprintf(os.Stderr, "Server error: %v\n", err)
 		os.Exit(1)
 	}
@@ -48,6 +49,7 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 		URL     string            `json:"url"`
 		Body    json.RawMessage   `json:"body"`
 		Headers map[string]string `json:"headers"`
+		Method  string            `json:"method"`
 	}
 
 	limited := http.MaxBytesReader(w, r.Body, maxBodySize)
@@ -61,12 +63,49 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, req.URL, bytes.NewReader(req.Body))
-	if err != nil {
-		http.Error(w, "Failed to create request: "+err.Error(), http.StatusBadRequest)
-		return
+	method := http.MethodPost
+	if strings.EqualFold(req.Method, "GET") {
+		method = http.MethodGet
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
+
+	var httpReq *http.Request
+	if method == http.MethodGet {
+		// For GET requests, encode the GraphQL query as a URL parameter
+		var bodyMap map[string]interface{}
+		if err := json.Unmarshal(req.Body, &bodyMap); err != nil {
+			http.Error(w, "Failed to parse body for GET encoding: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		parsedURL, err := url.Parse(req.URL)
+		if err != nil {
+			http.Error(w, "Invalid URL: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		q := parsedURL.Query()
+		for k, v := range bodyMap {
+			switch val := v.(type) {
+			case string:
+				q.Set(k, val)
+			default:
+				b, _ := json.Marshal(val)
+				q.Set(k, string(b))
+			}
+		}
+		parsedURL.RawQuery = q.Encode()
+		httpReq, err = http.NewRequest(http.MethodGet, parsedURL.String(), nil)
+		if err != nil {
+			http.Error(w, "Failed to create request: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+	} else {
+		var err error
+		httpReq, err = http.NewRequest(http.MethodPost, req.URL, bytes.NewReader(req.Body))
+		if err != nil {
+			http.Error(w, "Failed to create request: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		httpReq.Header.Set("Content-Type", "application/json")
+	}
 	for k, v := range req.Headers {
 		httpReq.Header.Set(k, v)
 	}
