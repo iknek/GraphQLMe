@@ -29,7 +29,7 @@ func main() {
 	mux.HandleFunc("/api/security/scan", handleScan)
 	mux.HandleFunc("/api/security/scan/", handleScanResult)
 
-	fmt.Println("GraphQL Tool running at http://localhost:8070")
+	fmt.Println("GraphQL Tool running at http://localhost:8083")
 	if err := http.ListenAndServe(":8083", mux); err != nil {
 		fmt.Fprintf(os.Stderr, "Server error: %v\n", err)
 		os.Exit(1)
